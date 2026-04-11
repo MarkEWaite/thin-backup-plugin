@@ -1,10 +1,10 @@
 # Thin Backup Plugin
 
-[![Build Status](https://ci.jenkins.io/job/Plugins/job/thin-backup-plugin/job/master/badge/icon)](https://ci.jenkins.io/job/Plugins/job/thin-backup-plugin/job/master/)
+[![Build Status](https://ci.jenkins.io/buildStatus/icon?job=Plugins%2Fthin-backup-plugin%2Fmaster)](https://ci.jenkins.io/job/Plugins/job/thin-backup-plugin/job/master/)
 [![GitHub release](https://img.shields.io/github/v/release/jenkinsci/thin-backup-plugin.svg?label=release)](https://github.com/jenkinsci/thin-backup-plugin/releases/latest)
 [![Jenkins Plugin Installs](https://img.shields.io/jenkins/plugin/i/thinBackup.svg?color=blue)](https://plugins.jenkins.io/thinBackup/)
 
-This plugin simply backs up the global and job specific configurations (not the archive or the workspace). It can be scheduled and only backs up the most vital configuration info. It also let's you decide what vital means for you. For example it does backup the credentials.xml, but will not backup the server keys. Therefore any backup, which is used on an fresh server, will see the credentials, but is not able to correctly decrypt them. Therefore the credentials will be corrupt. So any migration use case will need the secrets additionally, or make use of the backup additional files feature.
+This plugin simply backs up the global and job specific configurations (not the archive or the workspace). It can be scheduled and only backs up the most vital configuration info. It also lets you decide what vital means for you. For example, it does backup the credentials.xml, but will not back up the server keys. Therefore, any backup, which is used on a fresh server, will see the credentials, but is not able to correctly decrypt them. Therefore the credentials will be corrupt. So any migration use case will need the secrets additionally, or make use of the backup additional files feature.
 Be aware that in general the controller key should be stored somewhere else, as stated in the Jenkins [backup guidelines](https://www.jenkins.io/doc/book/system-administration/backing-up/#back-up-the-controller-key-separately).
 
 <!-- TOC -->
@@ -12,7 +12,24 @@ Be aware that in general the controller key should be stored somewhere else, as 
   * [Documentation](#documentation)
     * [Backup Now](#backup-now)
     * [Restore](#restore)
+      * [Restore next build number file (if found in backup)](#restore-next-build-number-file-if-found-in-backup)
+      * [Restore plugins](#restore-plugins)
     * [Settings](#settings)
+      * [Backup directory](#backup-directory)
+      * [Backup schedule for full backups](#backup-schedule-for-full-backups)
+      * [Backup schedule for differential backups](#backup-schedule-for-differential-backups)
+      * [Wait until Jenkins is idle to perform a backup](#wait-until-jenkins-is-idle-to-perform-a-backup)
+      * [Force Jenkins to quiet mode after specified amount of minutes](#force-jenkins-to-quiet-mode-after-specified-amount-of-minutes)
+      * [Max number of backup sets](#max-number-of-backup-sets)
+      * [Files excluded from backup](#files-excluded-from-backup)
+      * [Backup build results](#backup-build-results)
+      * [Backup next build number file](#backup-next-build-number-file)
+      * [Backup 'config-history' folder](#backup-config-history-folder)
+      * [Backup 'userContents'](#backup-usercontents)
+      * [Backup only builds marked to keep](#backup-only-builds-marked-to-keep)
+      * [Backup additional files](#backup-additional-files)
+      * [Clean up differential backups](#clean-up-differential-backups)
+      * [Move old backups to ZIP files](#move-old-backups-to-zip-files)
   * [Jenkins Configuration as Code (JCasC) support](#jenkins-configuration-as-code-jcasc-support)
   * [Backup process](#backup-process)
   * [Feature requests or bug reports](#feature-requests-or-bug-reports)
@@ -136,7 +153,7 @@ forever" are backed up.
 #### Backup additional files
 
 This feature enables the user to include additional files into the backup. For example to include fingerprints and the files for secrets; add the following regular expression : `(fingerprints|.*|.*|.*\.xml)(secrets|.*\..*)(secrets|.*)$`. 
-This allows the plugin to be used in migration scenarions. For example the secrets will not automatically by backuped, but are needed to descrypt the backuped credentials. Therefore the additional files field is needed to create a fully functional backup of your jenkins server data.
+This allows the plugin to be used in migration scenarios. For example the secrets will not automatically by backuped, but are needed to decrypt the backuped credentials. Therefore, the additional files field is needed to create a fully functional backup of your jenkins server data.
 
 > ***Important***: Be aware that in general the controller key should be stored somewhere else, as stated in the Jenkins [backup guidelines](https://www.jenkins.io/doc/book/system-administration/backing-up/#back-up-the-controller-key-separately)
 
@@ -190,11 +207,11 @@ unclassified:
 
 ## Backup process
 
-Because many of you are asking why Jenkins is going to shutdown when a backup is triggered, I
+Because many of you are asking why Jenkins is going to shut down when a backup is triggered, I
 decided to explain my ideas behind the backup process.
 
 First of all, **Jenkins will not be shutdown at any time**.  Second, I use the built-in quiet mode
-(Jenkins is going to shutdown) to ensure a safe environment during the backup process and cancel
+(Jenkins is going to shut down) to ensure a safe environment during the backup process and cancel
 the quiet mode afterward.  This could be misleading, **but there is no point where Jenkins will be
 shutdown**.
 
