@@ -16,9 +16,9 @@ public class TestHelper {
      * filesystem. They do not contain a config.xml nor any other file. We simulate a structure like that here:
      * <pre>JENKINS_HOME/jobs/jobName
      * '- jobs</pre>
-     * @param jenkinsHome
-     * @param jobName
-     * @return
+     * @param jenkinsHome - the Jenkins home directory
+     * @param jobName - the name of the job
+     * @return the created empty job directory
      */
     public static File createMaliciousMultiJob(File jenkinsHome, String jobName) throws Exception {
         final File emptyJobDir = newFolder(jenkinsHome, HudsonBackup.JOBS_DIR_NAME, "empty");
