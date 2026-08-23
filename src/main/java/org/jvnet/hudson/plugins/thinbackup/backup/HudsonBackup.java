@@ -29,7 +29,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -346,7 +345,7 @@ public class HudsonBackup {
     }
 
     private void backupJob(final File jobDirectory, final File jobsBackupDirectory, final String jobName)
-            throws IOException, NoSuchFileException, FileNotFoundException {
+            throws IOException {
         final File jobBackupDirectory = new File(jobsBackupDirectory, jobName);
         backupJobConfigFor(jobDirectory, jobBackupDirectory);
         backupBuildsFor(jobDirectory, jobBackupDirectory);
@@ -459,8 +458,8 @@ public class HudsonBackup {
 
     /**
      *
-     * @param dir
-     * @return
+     * @param dir - the directory to search for config.xml files
+     * @return a list of directories containing config.xml files
      * @throws UncheckedIOException - FileUtils.listFiles broke with such an exception
      */
     private List<File> findAllConfigurations(File dir) throws UncheckedIOException {

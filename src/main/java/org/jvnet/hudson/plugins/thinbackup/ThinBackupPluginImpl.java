@@ -35,7 +35,6 @@ import net.sf.json.JSONObject;
 import org.jenkinsci.Symbol;
 import org.jvnet.hudson.plugins.thinbackup.utils.EnvironmentVariableNotDefinedException;
 import org.jvnet.hudson.plugins.thinbackup.utils.Utils;
-import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.DataBoundSetter;
 import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest2;
@@ -69,7 +68,6 @@ public class ThinBackupPluginImpl extends GlobalConfiguration {
     private boolean backupBuildsToKeepOnly = false;
     private boolean failFast = true;
 
-    @DataBoundConstructor
     public ThinBackupPluginImpl() {
         // check if old config is there and no new config exists
         final File oldConfig = new File(Jenkins.get().getRootDir(), "thinBackup.xml");
